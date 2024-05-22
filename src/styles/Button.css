@@ -1,0 +1,18 @@
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #000000;
+    color: #fff;
+    font-weight: bold;
+
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif !important;
+    font-size: 1em;
+
+    /*line-height: 1;*/
+    /*font-weight: inherit;*/
+}
+
+button:hover {
+    background-color: #454954;
+}

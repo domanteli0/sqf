@@ -1,5 +1,6 @@
 header {
-    background-color: #ffcc00;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif !important;
+    background-color: #ffffff;
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
