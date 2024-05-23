@@ -1,5 +1,14 @@
 # Slay Queen Frontend (sqf)
 
+## Prerequisites
+
+> [!IMPORTANT]
+> 
+> These instructions might be a inaccurate,
+> or missing some dependencies.
+
+You'll need to install: `pnpm`, maybe/probably `npm` & `node` (for MacOS: `brew install npm node pnpm`).
+
 ## TODO
 
 - [ ] Make forms in Registration and Log In a common component.
