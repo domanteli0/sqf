@@ -1,14 +1,14 @@
 import React from 'react';
 import Header from '../components/Header';
-import '../styles/Register.css';
+import '../styles/Form.css';
 
 const Register: React.FC = () => {
     return (
         <div>
             <Header />
-            <main>
+            <main className="register-form-container">
                 <h2>Create account</h2>
-                <form>
+                <form className="register-form">
                     <label>
                         Username
                         <input type="text" placeholder="Your username" />
