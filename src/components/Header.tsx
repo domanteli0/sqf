@@ -12,6 +12,7 @@ const Header: React.FC = () => {
                 <a href="/">Home</a>
                 <a href="/register">Register</a>
                 <a href="/login">Login</a>
+                <a href="/create">Create Recipe</a>
             </nav>
         </header>
     );
