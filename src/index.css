@@ -13,6 +13,15 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+h2 {
+    margin-bottom: 20px;
+}
+
+h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
 /** {*/
 /*    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif !important;*/
 /*    line-height: 1.5;*/
