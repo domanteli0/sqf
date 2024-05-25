@@ -1,14 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Header from '../components/Header';
 import RecipeCard from '../components/RecipeCard';
+import defaultServerConfig from "../common/server-info.ts";
+import Recipe from "../types/Recipe.ts";
 
 const Home: React.FC = () => {
-    // Mock data
-    const recipes = [
-        { id: '1', title: 'Recipe 1', duration: '15 min' },
-        { id: '2', title: 'Recipe 2', duration: '10 min' },
-        { id: '3', title: 'Recipe 3', duration: '5 min' },
-    ];
+    const { apiUrl } = defaultServerConfig
+    const [recipes, setRecipes] = useState<Array<Recipe>>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        // Replace the URL with the endpoint you want to fetch data from
+        axios.get(`${apiUrl}/api/recipes`)
+            .then(async response => {
+                setRecipes(response.data);
+                setLoading(false);
+            })
+            .catch(error => {
+                // alert(error)
+                setError(error);
+                setLoading(false);
+            });
+    }, []);
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error loading recipes: {error.message}</p>;
 
     return (
         <div>
@@ -21,8 +39,6 @@ const Home: React.FC = () => {
             </main>
         </div>
     );
-
 };
-
 
 export default Home;
