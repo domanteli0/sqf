@@ -47,10 +47,10 @@ const RecipeDetail: React.FC = () => {
                 <p>{recipe?.shortDescription}</p>
                 <img src={placeholder} alt="Photo of a dish"/>
                 <div className="recipe-info">
-                    <InfoChip title="Prep time" value={`${recipe?.prepTime} min.`}></InfoChip>
-                    <InfoChip title="Cook time" value={`${recipe?.cookTime} min.`}></InfoChip>
-                    <InfoChip title="Total time" value={`${recipe?.prepTime + recipe?.cookTime} min.`}></InfoChip>
-                    <InfoChip title="Servings" value={`${recipe?.servings} min.`}></InfoChip>
+                    <InfoChip title="Prep time" value={recipe?.prepTime} postfix="min."></InfoChip>
+                    <InfoChip title="Cook time" value={`${recipe?.cookTime}`} postfix="min."></InfoChip>
+                    <InfoChip title="Total time" value={`${recipe?.prepTime + recipe?.cookTime}`} postfix="min"></InfoChip>
+                    <InfoChip title="Servings" value={`${recipe?.servings}`} postfix=""></InfoChip>
                 </div>
                 <h3>Ingredients:</h3>
                 <ul>

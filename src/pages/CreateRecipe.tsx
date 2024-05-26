@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
+import InfoChip from '../components/InfoChip';
 import '../styles/CreateRecipe.css';
 
 const CreateRecipe: React.FC = () => {
@@ -13,6 +14,7 @@ const CreateRecipe: React.FC = () => {
     const [directions, setDirections] = useState<string[]>([]);
     const [ingredient, setIngredient] = useState('');
     const [direction, setDirection] = useState('');
+    const [image, setImage] = useState<File | null>(null);
 
     const handleAddIngredient = () => {
         if (ingredient) {
@@ -40,14 +42,20 @@ const CreateRecipe: React.FC = () => {
             servings,
             ingredients,
             directions,
+            image,
         });
+    };
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setImage(e.target.files[0]);
+        }
     };
 
     return (
         <div>
             <Header />
             <main className="create-recipe">
-                <h2>Type in recipe name...</h2>
                 <form onSubmit={handleSubmit}>
                     <label>
                         <input
@@ -59,62 +67,64 @@ const CreateRecipe: React.FC = () => {
                         />
                     </label>
                     <label>
-            <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Add recipe description..."
-                className="large-input"
-            ></textarea>
+                        <textarea
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="Add recipe description..."
+                            className="large-input"
+                        ></textarea>
                     </label>
                     <div className="image-upload">
-                        <label htmlFor="imageUpload">Include an image</label>
-                        <input type="file" id="imageUpload" />
+                        <label htmlFor="imageUpload" className="image-label">
+                            {image ? (
+                                <img
+                                    src={URL.createObjectURL(image)}
+                                    alt="Uploaded"
+                                    className="uploaded-image"
+                                />
+                            ) : (
+                                <div className="placeholder-image">
+                                    <p>Include an image</p>
+                                </div>
+                            )}
+                        </label>
+                        <input
+                            type="file"
+                            id="imageUpload"
+                            className="image-input"
+                            onChange={handleImageChange}
+                        />
                     </div>
                     <div className="recipe-info">
-                        <div className="info-block">
-                            <label>
-                                Prep time
-                                <input
-                                    type="text"
-                                    value={prepTime}
-                                    onChange={(e) => setPrepTime(e.target.value)}
-                                    placeholder="time"
-                                />
-                            </label>
-                        </div>
-                        <div className="info-block">
-                            <label>
-                                Cook time
-                                <input
-                                    type="text"
-                                    value={cookTime}
-                                    onChange={(e) => setCookTime(e.target.value)}
-                                    placeholder="time"
-                                />
-                            </label>
-                        </div>
-                        <div className="info-block">
-                            <label>
-                                Total time
-                                <input
-                                    type="text"
-                                    value={totalTime}
-                                    onChange={(e) => setTotalTime(e.target.value)}
-                                    placeholder="time"
-                                />
-                            </label>
-                        </div>
-                        <div className="info-block">
-                            <label>
-                                Servings
-                                <input
-                                    type="text"
-                                    value={servings}
-                                    onChange={(e) => setServings(e.target.value)}
-                                    placeholder="servings"
-                                />
-                            </label>
-                        </div>
+                        <InfoChip
+                            title="Prep time"
+                            value={`${prepTime}`}
+                            postfix="min."
+                            editable={true}
+                            onChange={(value) => {setPrepTime(value); setTotalTime(value + parseInt(cookTime))}}
+                        />
+                        <InfoChip
+                            title="Cook time"
+                            value={`${cookTime}`}
+                            postfix="min."
+                            editable={true}
+                            onChange={(value) => {setPrepTime(value); setTotalTime(value + parseInt(prepTime))}}
+                            // onChange={(value) => setCookTime(value)}
+                        />
+                        <InfoChip
+                            title="Total time"
+                            value={`${parseInt(prepTime) + parseInt(cookTime)}`}
+                            editable={false}
+                            postfix="min."
+                            onChange={ _ => setTotalTime((parseInt(prepTime) + parseInt(cookTime)).toString())}
+                        />
+                        <InfoChip
+                            title="Servings"
+                            value={`${servings}`}
+                            editable={true}
+                            postfix=""
+                            onChange={(value) => setServings(value)}
+                        />
                     </div>
                     <h3>Ingredients:</h3>
                     <div className="ingredient-inputs">
@@ -138,11 +148,11 @@ const CreateRecipe: React.FC = () => {
                     </ul>
                     <h3>Directions:</h3>
                     <div className="direction-inputs">
-            <textarea
-                value={direction}
-                onChange={(e) => setDirection(e.target.value)}
-                placeholder="Add the directions of the recipe..."
-            ></textarea>
+                        <textarea
+                            value={direction}
+                            onChange={(e) => setDirection(e.target.value)}
+                            placeholder="Add the directions of the recipe..."
+                        ></textarea>
                         <button type="button" onClick={handleAddDirection}>
                             Add direction
                         </button>

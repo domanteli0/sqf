@@ -6,8 +6,6 @@
 
 body {
   font-family: Arial, sans-serif;
-  background-color: #f8f8f8;
-  color: #333;
 }
 
 a {
@@ -31,6 +29,19 @@ form label {
 form input, form textarea {
   padding: 8px;
   margin-top: 4px;
-  border: 1px solid #ccc;
+  border: 1px solid;
+  border-color: #ccc;
   border-radius: 8px;
 }
+
+@media (prefers-color-scheme: light) {
+  body {
+    background-color: #f8f8f8;
+    color: #333;
+  }
+
+  form input, form textarea {
+    border-color: #ccc;
+  }
+}
+
