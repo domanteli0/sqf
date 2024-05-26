@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import Header from '../components/Header';
 import '../styles/Form.css';
 import defaultServerConfig from "../common/server-info.ts";
+import {useNavigate} from "react-router-dom";
 
 const Login: React.FC = () => {
     const { apiUrl } = defaultServerConfig;
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         email: null,
@@ -18,7 +20,6 @@ const Login: React.FC = () => {
             [name]: value
         });
     };
-
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -48,6 +49,7 @@ const Login: React.FC = () => {
         } catch (error) {
             console.error('Error:', error);
         }
+        navigate('/');
     };
 
     return (

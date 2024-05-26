@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import Header from '../components/Header';
 import '../styles/Form.css';
 import defaultServerConfig from "../common/server-info.ts";
+import {useNavigate} from "react-router-dom";
 
 // TODO: handle 409 CONFLICT
 const Register: React.FC = () => {
+    const navigate = useNavigate();
 
     const { apiUrl } = defaultServerConfig;
 
@@ -51,6 +53,7 @@ const Register: React.FC = () => {
         } catch (error) {
             console.error('Error:', error);
         }
+        navigate('/');
     };
 
     return (
