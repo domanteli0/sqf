@@ -3,8 +3,8 @@ type Recipe = {
     userId: any,
     title: string,
     shortDescription: string,
-    ingredientsList: string,
-    cookingSteps: any,
+    ingredientsList: string, // TODO: List of strings
+    cookingSteps: string, // TODO: List of strings
     imageId: string,
     prepTime: number,
     cookTime: number,

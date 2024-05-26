@@ -1,42 +1,38 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import '../styles/RecipeDetail.css';
 import axios from "axios";
 import defaultServerConfig from "../common/server-info.ts";
 import Recipe from "../types/Recipe.ts";
-
-interface RouteParams {
-    id: string;
-}
+import InfoChip from "../components/InfoChip.tsx";
+import placeholder from "../assets/placeholder.jpeg";
 
 const RecipeDetail: React.FC = () => {
     const { apiUrl } = defaultServerConfig;
     const params = useParams();
-    console.debug(params);
     const id = params['recipeId'];
-    console.debug(id);
-    const [recipe, setRecipes] = useState<Recipe | null>(null);
+    const [recipe, setRecipe] = useState<Recipe | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    console.debug(params);
+    console.debug(`Recipe id: ${id}`);
+
     useEffect(() => {
-        // Replace the URL with the endpoint you want to fetch data from
         axios.get(`${apiUrl}/api/recipes/${id}`)
-            .then(async response => {
-                setRecipes(response.data);
+            .then(response => {
+                setRecipe(response.data);
                 setLoading(false);
             })
             .catch(error => {
-                // alert(error)
                 setError(error);
                 setLoading(false);
             });
-    }, []);
+    }, [id, apiUrl]);
 
     if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error loading recipes: {error.message}</p>;
-
+    if (error) return <p>Error loading recipe: {error.message}</p>;
 
     return (
         <div>
@@ -49,45 +45,31 @@ const RecipeDetail: React.FC = () => {
                     </div>
                 </div>
                 <p>{recipe?.shortDescription}</p>
-                {/*<img src={recipe?.imageId} alt="Recipe" className="recipe-image" />*/}
+                <img src={placeholder} alt="Photo of a dish" className="recipe-image"/>
                 <div className="recipe-info">
-                    <div className="info-block">
-                        <span>Prep time</span>
-                        <span>{recipe?.prepTime}</span>
-                    </div>
-                    <div className="info-block">
-                        <span>Cook time</span>
-                        <span>{recipe?.cookTime}</span>
-                    </div>
-                    <div className="info-block">
-                        <span>Total time</span>
-                        <span>{recipe?.cookTime} + {recipe?.prepTime}</span>
-                    </div>
-                    <div className="info-block">
-                        <span>Servings</span>
-                        <span>{recipe.servings}</span>
-                    </div>
+                    <InfoChip title="Prep time" value={`${recipe?.prepTime} min.`}></InfoChip>
+                    <InfoChip title="Cook time" value={`${recipe?.cookTime} min.`}></InfoChip>
+                    <InfoChip title="Total time" value={`${recipe?.prepTime + recipe?.cookTime} min.`}></InfoChip>
+                    <InfoChip title="Servings" value={`${recipe?.servings} min.`}></InfoChip>
                 </div>
                 <h3>Ingredients:</h3>
-                <strong>TODO</strong>
-                {/*<ul>*/}
-                {/*    {recipe?.ingredientsList.map((ingredient, index) => (*/}
-                {/*        <li key={index}>{ingredient}</li>*/}
-                {/*    ))}*/}
-                {/*</ul>*/}
+                <ul>
+                    {recipe?.ingredientsList.split(',').map((ingredient, index) => (
+                        <li key={index}>{ingredient}</li>
+                    ))}
+                </ul>
                 <h3>Directions:</h3>
-                <strong>TODO</strong>
-                {/*<ol>*/}
-                {/*    {recipe.directions.map((direction, index) => (*/}
-                {/*        <li key={index}>{direction}</li>*/}
-                {/*    ))}*/}
-                {/*</ol>*/}
+                <ol>
+                    {recipe?.cookingSteps.split(',').map((step, index) => (
+                        <li key={index}>{step}</li>
+                    ))}
+                </ol>
                 <h3>Reviews:</h3>
                 <strong>TODO</strong>
-                {/*{recipe.reviews.map((review, index) => (*/}
+                {/*{recipe?.reviews.map((review, index) => (*/}
                 {/*    <div className="review" key={index}>*/}
-                {/*        <p>{review.user}</p>*/}
-                {/*        <p>{review.rating}</p>*/}
+                {/*        <p><strong>{review.user}</strong></p>*/}
+                {/*        <p>{'⭐'.repeat(review.rating)}</p>*/}
                 {/*        <p>{review.comment}</p>*/}
                 {/*    </div>*/}
                 {/*))}*/}
@@ -96,13 +78,13 @@ const RecipeDetail: React.FC = () => {
                     <strong>TODO</strong>
                     {/*<form>*/}
                     {/*    <label>*/}
-                    {/*        <span>0/5 star rating</span>*/}
+                    {/*        <span>Rating:</span>*/}
                     {/*        <input type="number" min="0" max="5" />*/}
                     {/*    </label>*/}
                     {/*    <label>*/}
                     {/*        <textarea placeholder="Leave your feedback"></textarea>*/}
                     {/*    </label>*/}
-                    {/*    <button type="submit">Register</button>*/}
+                    {/*    <button type="submit">Publish</button>*/}
                     {/*</form>*/}
                 </div>
             </main>
