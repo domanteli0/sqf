@@ -1,18 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/Header.css';
-import './Button';
-import Button from "./Button.tsx";
+import Button from './Button.tsx';
 
 const Header: React.FC = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const sessionKey = localStorage.getItem('sessionKey');
+        if (sessionKey) {
+            setIsLoggedIn(true);
+        }
+    }, []);
+
     return (
         <header>
             <h1>Slay Queen Recipes</h1>
             <nav>
-                <Button onClick="TODO" text="Home" />
+                <Button onClick={() => window.location.href = '/'} text="Home" />
                 <a href="/">Home</a>
-                <a href="/register">Register</a>
-                <a href="/login">Login</a>
-                <a href="/create">Create Recipe</a>
+                {!isLoggedIn && <a href="/register">Register</a>}
+                {!isLoggedIn && <a href="/login">Login</a>}
+                {isLoggedIn && <a href="/create">Create Recipe</a>}
             </nav>
         </header>
     );

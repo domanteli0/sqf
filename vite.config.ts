@@ -7,6 +7,10 @@ export default defineConfig({
     server: {
       proxy: {
         '/api/recipe': 'http://localhost:7001',
+
+        '/api/auth': 'http://localhost:7003',
+        '/api/users': 'http://localhost:7003',
+
         '/api/images': 'http://localhost:7004',
       },
     },
