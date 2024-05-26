@@ -58,7 +58,7 @@ const CreateRecipe: React.FC = () => {
         }
 
         const data = await response.json();
-        return data.imageUrl;
+        return data.imageId;
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -77,7 +77,6 @@ const CreateRecipe: React.FC = () => {
         };
 
         try {
-            console.debug(key);
             console.debug(formData);
             console.debug(JSON.stringify(formData));
             const response = await fetch(`${apiUrl}/api/recipes`, {

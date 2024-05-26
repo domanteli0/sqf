@@ -7,6 +7,7 @@ import defaultServerConfig from "../common/server-info.ts";
 import Recipe from "../types/Recipe.ts";
 import InfoChip from "../components/InfoChip.tsx";
 import placeholder from "../assets/placeholder.jpeg";
+import Image from "../components/Image.tsx";
 
 const RecipeDetail: React.FC = () => {
     const { apiUrl } = defaultServerConfig;
@@ -45,7 +46,11 @@ const RecipeDetail: React.FC = () => {
                     </div>
                 </div>
                 <p>{recipe?.shortDescription}</p>
-                <img src={placeholder} alt="Photo of a dish"/>
+                <Image
+                    src={recipe?.imageId ? `${apiUrl}/api/images/${recipe.imageId}` : placeholder}
+                    placeholder={placeholder}
+                    alt='Photo of the dish'
+                />
                 <div className="recipe-info">
                     <InfoChip title="Prep time" value={recipe?.prepTime} postfix="min."></InfoChip>
                     <InfoChip title="Cook time" value={`${recipe?.cookTime}`} postfix="min."></InfoChip>

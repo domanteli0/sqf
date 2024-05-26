@@ -42,9 +42,8 @@ ul, ol {
 .review {
     margin-bottom: 20px;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid;
     border-radius: 10px;
-    background-color: #f9f9f9;
 }
 
 .write-review {
@@ -68,7 +67,7 @@ ul, ol {
     width: 100%;
     padding: 10px;
     margin-top: 5px;
-    border: 1px solid #ccc;
+    border: 1px solid;
     border-radius: 5px;
 }
 
@@ -76,13 +75,7 @@ ul, ol {
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background-color: #333;
-    color: white;
     cursor: pointer;
-}
-
-.write-review button:hover {
-    background-color: #555;
 }
 
 .recipe-detail img {
@@ -91,4 +84,48 @@ ul, ol {
     aspect-ratio: 720 / 365;
     object-fit: cover;
     border-radius: 16px;
+    min-width: 100%;
 }
+
+
+@media (prefers-color-scheme: light) {
+    .review {
+        border-color: #ccc;
+        background-color: #f9f9f9;
+    }
+
+    .write-review input[type="number"], .write-review textarea {
+        border-color: #ccc;
+    }
+
+    .write-review button {
+        background-color: #333;
+        color: white;
+    }
+
+    .write-review button:hover {
+        background-color: #555;
+    }
+}
+
+
+@media (prefers-color-scheme: dark) {
+    .review {
+        border-color: #ccc;
+        background-color: #000;
+    }
+
+    .write-review input[type="number"], .write-review textarea {
+        border-color: #ccc;
+    }
+
+    .write-review button {
+        background-color: #ccc;
+        color: black;
+    }
+
+    .write-review button:hover {
+        background-color: #555;
+    }
+}
+

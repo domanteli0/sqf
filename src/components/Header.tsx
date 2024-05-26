@@ -19,7 +19,6 @@ const Header: React.FC = () => {
         <header>
             <h1>Slay Queen Recipes</h1>
             <nav>
-                <Button onClick={() => window.location.href = '/'} text="Home" />
                 <a href="/">Home</a>
                 {!isLoggedIn && <a href="/register">Register</a>}
                 {!isLoggedIn && <a href="/login">Login</a>}

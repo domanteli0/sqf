@@ -3,17 +3,18 @@ import '../styles/RecipeCard.css';
 import { Link } from 'react-router-dom';
 import placeholder from "../assets/placeholder.jpeg";
 import defaultServerConfig from "../common/server-info.ts";
+import Image from "./Image.tsx";
 
 interface RecipeCardProps {
     id: string;
     title: string;
     duration: string;
-    imageUrl: string; // Add this prop for the image URL
+    imageId: string; // Add this prop for the image URL
     rating: number; // Add this prop for the rating
 }
 
-const RecipeCard: React.FC<RecipeCardProps> = ({ id, title, duration, imageUrl, rating }) => {
-    const { apiUrl } = defaultServerConfig;
+const RecipeCard: React.FC<RecipeCardProps> = ({ id, title, duration, imageId, rating }) => {
+    const {apiUrl} = defaultServerConfig;
 
     const renderStars = () => {
         const stars = [];
@@ -25,10 +26,17 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ id, title, duration, imageUrl, 
         return stars;
     };
 
+    // const img = <img src={imageId ? `${apiUrl}/api/images/${imageId}` : placeholder} alt={title}/>;
+    // console.log(img)
+
     return (
         <div className="recipe-card">
             <Link to={`/recipe/${id}`}>
-                <img src={imageUrl ? `${apiUrl}/api/images/${imageUrl}` : placeholder} alt={title} className="recipe-image" />
+                <Image
+                    src={imageId ? `${apiUrl}/api/images/${imageId}` : placeholder}
+                    placeholder={placeholder}
+                    alt={title}
+                    className="recipe-image"/>
                 <div className="recipe-details">
                     <h3>{title}</h3>
                     <p>Duration: {duration}</p>

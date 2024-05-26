@@ -13,7 +13,6 @@ main.home-container {
     justify-content: center;
     padding: 20px;
     height: 500px;
-    background-color: #f8f8f8;
 }
 
 .welcome-section h1 {
@@ -36,3 +35,16 @@ main.home-container {
     justify-content: center;
     flex-wrap: wrap;
 }
+
+@media (prefers-color-scheme: light) {
+    .welcome-section {
+        background-color: #f8f8f8;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .welcome-section {
+        background-color: #000;
+    }
+}
+
