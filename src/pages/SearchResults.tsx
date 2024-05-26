@@ -1,11 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import axios from 'axios';
 import Header from '../components/Header';
 import RecipeCard from '../components/RecipeCard';
 import defaultServerConfig from "../common/server-info.ts";
-import Recipe from "../types/Recipe.ts";
 import "../styles/Home.css";
-import placeholder from "../assets/placeholder.jpeg";
 import Button from "../components/Button.tsx";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import SearchRecipe from "../types/SearchRecipe.ts";
@@ -32,7 +29,9 @@ const SearchResult: React.FC = () => {
                     method: "GET",
                 });
                 console.debug(response)
-                const data = await response.json()
+                let data = await response.json()
+                console.debug(data.results);
+                data = data.results
                 console.debug(data);
                 setRecipes(data);
                 // setRecipes(data.map((recipe: Recipe, index: number) => ({
@@ -53,6 +52,8 @@ const SearchResult: React.FC = () => {
         e.preventDefault();
         navigate(`/search?q=${searchText}`);
     };
+
+    console.debug(recipes);
 
     return (
         <div className="home-container">
@@ -80,11 +81,11 @@ const SearchResult: React.FC = () => {
                         <div className="recipe-list">
                             {recipes.map((recipe) => (
                                 <RecipeCard
-                                    key={recipe.userId}
-                                    id={recipe.userId}
+                                    key={recipe.id}
+                                    id={recipe.id}
                                     title={recipe.title}
                                     duration={`X min.`}
-                                    // rating=4
+                                    rating={4}
                                     imageUrl=''
                                 />
                             ))}

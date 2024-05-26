@@ -30,7 +30,6 @@ form input, form textarea {
   padding: 8px;
   margin-top: 4px;
   border: 1px solid;
-  border-color: #ccc;
   border-radius: 8px;
 }
 
@@ -43,5 +42,25 @@ form input, form textarea {
   form input, form textarea {
     border-color: #ccc;
   }
+
+  form input, form textarea {
+    border-color: #ccc;
+  }
 }
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #f8f8f8;
+    background-color: #333;
+  }
+
+  form input, form textarea {
+    border-color: #ccc;
+  }
+
+  form input, form textarea {
+    border-color: #ccc;
+  }
+}
+
 

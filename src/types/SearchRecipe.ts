@@ -1,4 +1,5 @@
 type SearchRecipe = {
+    id: string;
     userId: string, //Guid,
     title: string,
     shortDescription: string,
