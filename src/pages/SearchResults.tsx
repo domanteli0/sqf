@@ -86,7 +86,7 @@ const SearchResult: React.FC = () => {
                                     title={recipe.title}
                                     duration={`X min.`}
                                     rating={4}
-                                    imageUrl=''
+                                    imageUrl={recipe.imageId}
                                 />
                             ))}
                         </div>

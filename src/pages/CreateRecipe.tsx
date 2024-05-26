@@ -4,10 +4,10 @@ import InfoChip from '../components/InfoChip';
 import '../styles/CreateRecipe.css';
 import defaultServerConfig from "../common/server-info.ts";
 import Recipe from "../types/Recipe.ts";
-import recipe from "../types/Recipe.ts";
 
 const CreateRecipe: React.FC = () => {
-    const {apiUrl} = defaultServerConfig
+    const {apiUrl} = defaultServerConfig;
+    const {key} = JSON.parse(localStorage.getItem('sessionInfo'));
 
     const [recipeName, setRecipeName] = useState('');
     const [description, setDescription] = useState('');
@@ -34,43 +34,70 @@ const CreateRecipe: React.FC = () => {
         }
     };
 
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setImage(e.target.files[0]);
+        }
+    };
+
+    const uploadImage = async (image: File) => {
+        const formData = new FormData();
+        formData.append('file', image);
+
+        const response = await fetch(`${apiUrl}/api/images`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${key}`,
+            },
+            body: formData,
+        });
+
+        if (!response.ok) {
+            console.error(response);
+            throw new Error('Failed to upload image');
+        }
+
+        const data = await response.json();
+        return data.imageUrl;
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const formData : Recipe = {
+        const imageId = await uploadImage(image);
+
+        const formData: Recipe = {
             title: recipeName,
             shortDescription: description,
             ingredientsList: ingredients.join(', '),
             cookingSteps: directions.join(', '),
             prepTime: parseInt(prepTime),
             cookTime: parseInt(cookTime),
+            imageId: imageId, // Include the uploaded image URL
         };
 
         try {
-            const { key } = JSON.parse(localStorage.getItem('sessionInfo'));
-            console.debug(formData)
-            console.debug(JSON.stringify(formData))
+            console.debug(key);
+            console.debug(formData);
+            console.debug(JSON.stringify(formData));
             const response = await fetch(`${apiUrl}/api/recipes`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${key}`
+                    'Authorization': `Bearer ${key}`,
                 },
                 body: JSON.stringify(formData),
             });
+
             if (!response.ok) {
-                console.error(response)
+                console.error(response);
+                console.error(await response.json());
                 throw new Error('Network response was not ok');
             }
+
             console.log('Recipe submitted successfully:', response.data);
         } catch (error) {
             console.error('Error submitting recipe:', error);
-        }
-    };
-
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            setImage(e.target.files[0]);
         }
     };
 
@@ -147,7 +174,7 @@ const CreateRecipe: React.FC = () => {
                             postfix=""
                             editable={true}
                             onChange={(value) => {
-                                setServings(value)
+                                setServings(value);
                             }}
                         />
                     </div>
