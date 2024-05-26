@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 import Header from '../components/Header';
 import InfoChip from '../components/InfoChip';
 import '../styles/CreateRecipe.css';
+import defaultServerConfig from "../common/server-info.ts";
 
 const CreateRecipe: React.FC = () => {
+    const { apiUrl } = defaultServerConfig
+
     const [recipeName, setRecipeName] = useState('');
     const [description, setDescription] = useState('');
     const [prepTime, setPrepTime] = useState('');
     const [cookTime, setCookTime] = useState('');
-    const [totalTime, setTotalTime] = useState('');
-    const [servings, setServings] = useState('');
+    const [servings, setServings] = useState('-');
     const [ingredients, setIngredients] = useState<string[]>([]);
     const [directions, setDirections] = useState<string[]>([]);
     const [ingredient, setIngredient] = useState('');
@@ -30,20 +32,40 @@ const CreateRecipe: React.FC = () => {
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // TODO: Handle the submission logic, possibly sending the data to the backend
-        console.log({
-            recipeName,
-            description,
-            prepTime,
-            cookTime,
-            totalTime,
-            servings,
-            ingredients,
-            directions,
-            image,
-        });
+
+        const formData = new FormData();
+        formData.append('recipeName', recipeName);
+        formData.append('description', description);
+        formData.append('prepTime', prepTime);
+        formData.append('cookTime', cookTime);
+        formData.append('totalTime', (parseInt(prepTime) + parseInt(cookTime)).toString());
+        formData.append('servings', servings);
+        formData.append('ingredients', ingredients.join(', '));
+        formData.append('directions', directions.join(', '));
+
+        try {
+            console.debug(localStorage.getItem('sessionKey'))
+            const response = await fetch(`${apiUrl}/api/recipes`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'SessionInfo': `${localStorage.getItem('sessionKey')}`,
+                    'Session-Info': `${localStorage.getItem('sessionKey')}`,
+                    'Session-Key': `${localStorage.getItem('sessionKey')}`,
+                    'SessionKey': `${localStorage.getItem('sessionKey')}`,
+                },
+                body: JSON.stringify(formData),
+            });
+            if (!response.ok) {
+                console.error(response)
+                throw new Error('Network response was not ok');
+            }
+            console.log('Recipe submitted successfully:', response.data);
+        } catch (error) {
+            console.error('Error submitting recipe:', error);
+        }
     };
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,32 +120,33 @@ const CreateRecipe: React.FC = () => {
                     <div className="recipe-info">
                         <InfoChip
                             title="Prep time"
-                            value={`${prepTime}`}
+                            value={prepTime}
                             postfix="min."
                             editable={true}
-                            onChange={(value) => {setPrepTime(value); setTotalTime(value + parseInt(cookTime))}}
+                            onChange={(value) => {
+                                setPrepTime(value);
+                            }}
                         />
                         <InfoChip
                             title="Cook time"
-                            value={`${cookTime}`}
+                            value={cookTime}
                             postfix="min."
                             editable={true}
-                            onChange={(value) => {setPrepTime(value); setTotalTime(value + parseInt(prepTime))}}
-                            // onChange={(value) => setCookTime(value)}
+                            onChange={(value) => {
+                                setCookTime(value);
+                            }}
                         />
                         <InfoChip
                             title="Total time"
                             value={`${parseInt(prepTime) + parseInt(cookTime)}`}
-                            editable={false}
                             postfix="min."
-                            onChange={ _ => setTotalTime((parseInt(prepTime) + parseInt(cookTime)).toString())}
                         />
                         <InfoChip
                             title="Servings"
-                            value={`${servings}`}
-                            editable={true}
+                            value={servings}
                             postfix=""
-                            onChange={(value) => setServings(value)}
+                            editable={true}
+                            onChange={(value) => {setServings(value)}}
                         />
                     </div>
                     <h3>Ingredients:</h3>

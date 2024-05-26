@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/InfoChip.css';
 
 interface InfoChipProps {
@@ -12,6 +12,10 @@ interface InfoChipProps {
 const InfoChip: React.FC<InfoChipProps> = ({ title, value, postfix, editable = false, onChange }) => {
     const [editing, setEditing] = useState(false);
     const [inputValue, setInputValue] = useState(value);
+
+    useEffect(() => {
+        setInputValue(value);
+    }, [value]);
 
     const handleEditClick = () => {
         setEditing(true);

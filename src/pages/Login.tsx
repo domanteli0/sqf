@@ -19,6 +19,7 @@ const Login: React.FC = () => {
         });
     };
 
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
@@ -37,7 +38,12 @@ const Login: React.FC = () => {
             }
 
             const result = await response.json();
-            localStorage.setItem('sessionKey', result.sessionKey);
+            localStorage.setItem('sessionInfo', JSON.stringify(
+                {
+                    expiresAt: Date.now() + (60 * 1000),
+                    key: result.sessionKey,
+                })
+            );
             console.log('Success:', result);
         } catch (error) {
             console.error('Error:', error);
