@@ -7,69 +7,91 @@ import Recipe from "../types/Recipe.ts";
 import "../styles/Home.css";
 import placeholder from "../assets/placeholder.jpeg";
 import Button from "../components/Button.tsx";
-import recipe from "../types/Recipe.ts";
 import {useNavigate, useSearchParams} from "react-router-dom";
+import SearchRecipe from "../types/SearchRecipe.ts";
 
 const SearchResult: React.FC = () => {
     const {apiUrl} = defaultServerConfig;
-    const [recipes, setRecipes] = useState<Array<Recipe>>([]);
+    const [recipes, setRecipes] = useState<Array<SearchRecipe>>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchText, setSearchText] = useState('');
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
 
-    console.debug("SEARCH PARAM")
-    console.debug(searchParams.get("searchTerm"))
+    useEffect( () => {
+        const searchTerm = searchParams.get("q") || '';
+        console.debug(searchParams.get("q"));
+        setSearchText(searchTerm);
+        console.debug("SEARCH PARAM")
+        console.debug(searchTerm)
 
-    // setSearchText(`${searchParams.get("searchTerm")}` ?? "")
-    // const navigate = useNavigate();
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/api/search?q=${searchTerm}`, {
+                    method: "GET",
+                });
+                console.debug(response)
+                const data = await response.json()
+                console.debug(data);
+                setRecipes(data);
+                // setRecipes(data.map((recipe: Recipe, index: number) => ({
+                //     ...recipe, id: index
+                // })));
+                setLoading(false);
+            } catch (error) {
+                console.error(error)
+                setError(error);
+                setLoading(false);
+            }
+        };
 
-    fetch(`${apiUrl}/api/search?searchTerm=${searchText}`,
-        {
-            method: "GET",
-        }
-    )
-        .then(async response => {
-            setRecipes(response.data);
-            setRecipes(recipes.map((recipe, index) => {
-                recipe.id = index;
-                return recipe;
-            }));
-            setLoading(false);
-        })
-        .catch(error => {
-            setError(error);
-            setLoading(false);
-        });
+        fetchData()
+    }, [apiUrl, searchParams]);
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error loading recipes: {error.message}</p>;
+    const handleSearchClick = (e: React.FormEvent) => {
+        e.preventDefault();
+        navigate(`/search?q=${searchText}`);
+    };
 
     return (
         <div className="home-container">
             <Header/>
             <main className='home-container'>
-                <form className="search-bar">
+                <form className="search-bar" onSubmit={handleSearchClick}>
                     <input
                         type="text"
                         placeholder="Search"
                         value={searchText}
-                        // onChange={(e) => setSearchText(e.target.value)}
+                        onChange={(e) => setSearchText(e.target.value)}
                     />
                     <Button
                         text="Search"
                         type="submit"
-                        // onClick={() => handleSearchClick()}
                     />
                 </form>
                 <h2>Best recipe results</h2>
-                {recipes.toString()}
-                {/*<div className="recipe-list">*/}
-                {/*    {recipes.map((recipe) => (*/}
-                {/*        <RecipeCard id={recipe.id} title={recipe.title}*/}
-                {/*                    duration={`${recipe.cookTime + recipe.prepTime} min.`}/>*/}
-                {/*    ))}*/}
-                {/*</div>*/}
+                {
+                    loading ? (
+                        <p>Loading...</p>
+                    ) : ( error ? (
+                        <p>Error loading recipes: {error.message}</p>
+                    ) : (
+                        <div className="recipe-list">
+                            {recipes.map((recipe) => (
+                                <RecipeCard
+                                    key={recipe.userId}
+                                    id={recipe.userId}
+                                    title={recipe.title}
+                                    duration={`X min.`}
+                                    // rating=4
+                                    imageUrl=''
+                                />
+                            ))}
+                        </div>
+
+                    ))
+                }
             </main>
         </div>
     );

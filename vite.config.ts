@@ -8,7 +8,7 @@ export default defineConfig({
       proxy: {
         '/api/recipe': 'http://localhost:7001',
 
-        'api/search': 'http://localhost:7002',
+        '/api/search': 'http://localhost:7002',
 
         '/api/auth': 'http://localhost:7003',
         '/api/users': 'http://localhost:7003',
