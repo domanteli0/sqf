@@ -45,7 +45,7 @@ const RecipeDetail: React.FC = () => {
                     </div>
                 </div>
                 <p>{recipe?.shortDescription}</p>
-                <img src={placeholder} alt="Photo of a dish" className="recipe-image"/>
+                <img src={placeholder} alt="Photo of a dish"/>
                 <div className="recipe-info">
                     <InfoChip title="Prep time" value={`${recipe?.prepTime} min.`}></InfoChip>
                     <InfoChip title="Cook time" value={`${recipe?.cookTime} min.`}></InfoChip>

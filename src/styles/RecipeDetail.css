@@ -85,7 +85,7 @@ ul, ol {
     background-color: #555;
 }
 
-img {
+.recipe-detail img {
     margin-top: 1em;
     margin-bottom: 0.5em;
     aspect-ratio: 720 / 365;
