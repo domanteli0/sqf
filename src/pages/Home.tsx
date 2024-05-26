@@ -7,6 +7,7 @@ import Recipe from "../types/Recipe.ts";
 import "../styles/Home.css";
 import placeholder from "../assets/placeholder.jpeg";
 import Button from "../components/Button.tsx";
+import { useNavigate } from 'react-router-dom';
 
 const Home: React.FC = () => {
     const {apiUrl} = defaultServerConfig;
@@ -14,6 +15,9 @@ const Home: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
+
+    const navigate = useNavigate();
+    const handleSearchClick = () => { navigate(`/search?searchTerm=${searchQuery}`) }
 
     useEffect(() => {
         axios.get(`${apiUrl}/api/recipes`)
@@ -27,11 +31,6 @@ const Home: React.FC = () => {
             });
     }, []);
 
-    const handleSearch = (e: React.FormEvent) => {
-        e.preventDefault();
-        // Implement search functionality here if needed
-    };
-
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error loading recipes: {error.message}</p>;
 
@@ -43,7 +42,7 @@ const Home: React.FC = () => {
                 <img src={placeholder} alt="Delicious meal" className="welcome-image"/>
             </div>
             <main className='home-container'>
-                <form className="search-bar" onSubmit={handleSearch}>
+                <form className="search-bar" onSubmit={handleSearchClick}>
                     <input
                         type="text"
                         placeholder="Search"

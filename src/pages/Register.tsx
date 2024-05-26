@@ -43,7 +43,7 @@ const Register: React.FC = () => {
             const result = await response.json();
             localStorage.setItem('sessionInfo', JSON.stringify(
                 {
-                    expiresAt: Date.now() + (60 * 1000),
+                    expiresAt: Date.now() + (60 * 60 * 1000),
                     key: result.sessionKey,
                 })
             );

@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Header from '../components/Header';
 import InfoChip from '../components/InfoChip';
 import '../styles/CreateRecipe.css';
 import defaultServerConfig from "../common/server-info.ts";
+import Recipe from "../types/Recipe.ts";
+import recipe from "../types/Recipe.ts";
 
 const CreateRecipe: React.FC = () => {
-    const { apiUrl } = defaultServerConfig
+    const {apiUrl} = defaultServerConfig
 
     const [recipeName, setRecipeName] = useState('');
     const [description, setDescription] = useState('');
@@ -35,26 +37,24 @@ const CreateRecipe: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const formData = new FormData();
-        formData.append('recipeName', recipeName);
-        formData.append('description', description);
-        formData.append('prepTime', prepTime);
-        formData.append('cookTime', cookTime);
-        formData.append('totalTime', (parseInt(prepTime) + parseInt(cookTime)).toString());
-        formData.append('servings', servings);
-        formData.append('ingredients', ingredients.join(', '));
-        formData.append('directions', directions.join(', '));
+        const formData : Recipe = {
+            title: recipeName,
+            shortDescription: description,
+            ingredientsList: ingredients.join(', '),
+            cookingSteps: directions.join(', '),
+            prepTime: parseInt(prepTime),
+            cookTime: parseInt(cookTime),
+        };
 
         try {
-            console.debug(localStorage.getItem('sessionKey'))
+            const { key } = JSON.parse(localStorage.getItem('sessionInfo'));
+            console.debug(formData)
+            console.debug(JSON.stringify(formData))
             const response = await fetch(`${apiUrl}/api/recipes`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'SessionInfo': `${localStorage.getItem('sessionKey')}`,
-                    'Session-Info': `${localStorage.getItem('sessionKey')}`,
-                    'Session-Key': `${localStorage.getItem('sessionKey')}`,
-                    'SessionKey': `${localStorage.getItem('sessionKey')}`,
+                    'Authorization': `Bearer ${key}`
                 },
                 body: JSON.stringify(formData),
             });
@@ -76,7 +76,7 @@ const CreateRecipe: React.FC = () => {
 
     return (
         <div>
-            <Header />
+            <Header/>
             <main className="create-recipe">
                 <form onSubmit={handleSubmit}>
                     <label>
@@ -146,7 +146,9 @@ const CreateRecipe: React.FC = () => {
                             value={servings}
                             postfix=""
                             editable={true}
-                            onChange={(value) => {setServings(value)}}
+                            onChange={(value) => {
+                                setServings(value)
+                            }}
                         />
                     </div>
                     <h3>Ingredients:</h3>

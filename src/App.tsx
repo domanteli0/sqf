@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import RecipeDetail from './pages/RecipeDetail';
 import CreateRecipe from './pages/CreateRecipe';
 import './styles/App.css';
+import SearchResult from "./pages/SearchResults.tsx";
 
 const App: React.FC = () => {
     return (
@@ -17,6 +18,7 @@ const App: React.FC = () => {
                     <Route path="/login" element={<Login/>} />
                     <Route path="/recipe/:recipeId" element={<RecipeDetail/>} />
                     <Route path="/create" element={<CreateRecipe/>} />
+                    <Route path="/search" element={<SearchResult/>} />
                 </Routes>
             </div>
         </Router>
